@@ -1,0 +1,14 @@
+[project]
+name = "comfyui-renoise"
+description = "ComfyUI nodes to use ReNoise"
+version = "1.0.0"
+license = {file = "LICENSE"}
+
+[project.urls]
+Repository = "https://github.com/logtd/ComfyUI-ReNoise"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = ""
+DisplayName = "ComfyUI-ReNoise"
+Icon = ""
