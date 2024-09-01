@@ -94,15 +94,10 @@ def build_sampler_fn(config: ReNoiseConfig, latent: torch.Tensor, model):
         approximated_z_tp1 = z_t.clone()
         for i in range(num_renoise_steps + 1):
             if config.noise_reg_steps > 0 and i == 0:
-                extra_args['model_options']['INJECTION_OFF'] = False
                 noise_pred = model(approximated_z_tp1, sigma * s_in, **extra_args)
-                extra_args['model_options']['INJECTION_OFF'] = True
                 noise_pred_optimal = model(z_tp1_forward, sigma * s_in, **extra_args)
             else:
-                if i == 0:
-                    extra_args['model_options']['INJECTION_OFF'] = False
                 noise_pred = model(approximated_z_tp1, sigma * s_in, **extra_args)
-                extra_args['model_options']['INJECTION_OFF'] = True
 
             # Calculate average noise
             if  i >= avg_range[0] and i < avg_range[1]:
@@ -133,15 +128,12 @@ def build_sampler_fn(config: ReNoiseConfig, latent: torch.Tensor, model):
     def sample_renoise_inversion(model, x, sigmas, extra_args=None, callback=None, disable=None, **kwargs):
         extra_args = extra_args if extra_args is not None else {}
         extra_args = extra_args.copy()
-        model_options = extra_args.get('model_options', {})
-        model_options['INJECTION_OFF'] = True
         z_base_noise = base_noise.to(x.device)
         z_base = z_0.to(x.device)
         for i in trange(len(sigmas) - 2, -1, -1, disable=disable):
             x = inversion_step(model, sigmas, i, x, z_base, z_base_noise, extra_args)
             if callback is not None:
                 callback({'x': x, 'i': len(sigmas) - i -1, 'sigma': sigmas[i], 'denoised': x})
-        del model_options['INJECTION_OFF']
         return x
     
     def sample_renoise(model, x, sigmas, extra_args=None, callback=None, disable=None, **kwargs):

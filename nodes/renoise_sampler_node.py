@@ -16,7 +16,7 @@ class ReNoiseSamplerNode:
                 {"scheduler": (comfy.samplers.KSampler.SCHEDULERS,),
                  "sampler": (["euler_ancestral"],),
                  "noise_seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
-                 "inersion_strength": ("FLOAT", {"default": 0.3, "min": 0.0, "max": 1.0, "step": 0.01, "round": 0.001}),
+                 "inversion_strength": ("FLOAT", {"default": 0.3, "min": 0.0, "max": 1.0, "step": 0.01, "round": 0.001}),
                  "inversion_steps": ("INT", {"default": 4, "min": 1, "max": 10000}),
                  "renoise_steps": ("INT", {"default": 9, "min": 0, "max": 10000}),
                  "avg_latent_estimations": ("BOOLEAN", { "default": True }),
@@ -44,7 +44,7 @@ class ReNoiseSamplerNode:
               scheduler, 
               sampler,
               noise_seed,
-              inersion_strength,
+              inversion_strength,
               inversion_steps,
               renoise_steps,
               avg_latent_estimations,
@@ -76,7 +76,7 @@ class ReNoiseSamplerNode:
             noise_reg_steps,
             noise_reg_ac_rolls,
             perform_noise_correction,
-            inersion_strength
+            inversion_strength
         )
 
         inverse_sampler_fn, sampler_fn, sigmas = build_sampler_fn(renoise_config, latent['samples'], model)
